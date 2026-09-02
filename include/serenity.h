@@ -218,9 +218,10 @@ SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instance);
 
-SERENITY_APIENTRY Serenity_Result serenityMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityMaskText(Serenity_Instance instance, const Serenity_MaskTextDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginMaskText(Serenity_Instance instance, const Serenity_MaskTextDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityEndMask(Serenity_Instance instance);
 
 SERENITY_APIENTRY Serenity_Result serenityDecorateRectangle(Serenity_Instance instance, const Serenity_DecorationRectangleDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityDecorateImage(Serenity_Instance instance, const Serenity_DecorationImageDesc *desc);
