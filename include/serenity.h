@@ -48,7 +48,7 @@ SERENITY_DEFINE_HANDLE(Serenity_Instance);
 // Ids
 SERENITY_DEFINE_ID(Serenity_ContainerId);
 SERENITY_DEFINE_ID(Serenity_ImageId);
-SERENITY_DEFINE_ID(Serenity_DecorationCustomId);
+SERENITY_DEFINE_ID(Serenity_TypeId);
 
 // Enums
 typedef enum Serenity_Result_t
@@ -157,6 +157,14 @@ typedef struct Serenity_MaskTextDesc_t
 	uint64_t text_size;
 } Serenity_MaskTextDesc;
 
+typedef struct Serenity_MaskCustomDesc_t
+{
+	Serenity_AnchoredRect anchored_rect;
+	Serenity_TypeId type_id;
+	const void *data;
+	uint64_t data_size;
+} Serenity_MaskCustomDesc;
+
 typedef struct Serenity_DecorationRectangleStyle_t
 {
 	Serenity_Corners radii;
@@ -191,7 +199,7 @@ typedef struct Serenity_DecorationTextDesc_t
 typedef struct Serenity_DecorationCustomDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
-	Serenity_DecorationCustomId custom_id;
+	Serenity_TypeId type_id;
 	const void *data;
 	uint64_t data_size;
 } Serenity_DecorationCustomDesc;
@@ -221,6 +229,7 @@ SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instanc
 SERENITY_APIENTRY Serenity_Result serenityBeginMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginMaskText(Serenity_Instance instance, const Serenity_MaskTextDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginMaskCustom(Serenity_Instance instance, const Serenity_MaskCustomDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndMask(Serenity_Instance instance);
 
 SERENITY_APIENTRY Serenity_Result serenityDecorateRectangle(Serenity_Instance instance, const Serenity_DecorationRectangleDesc *desc);
