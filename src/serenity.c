@@ -34,7 +34,7 @@ Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_In
 
 /*
  */
-Serenity_Result serenityBeginMaskBox(Serenity_Instance instance, const Serenity_MaskBoxDesc *desc)
+Serenity_Result serenityMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc)
 {
 	SERENITY_UNUSED(desc);
 
@@ -44,7 +44,7 @@ Serenity_Result serenityBeginMaskBox(Serenity_Instance instance, const Serenity_
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityBeginMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc)
+Serenity_Result serenityMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc)
 {
 	SERENITY_UNUSED(desc);
 
@@ -54,16 +54,17 @@ Serenity_Result serenityBeginMaskImage(Serenity_Instance instance, const Serenit
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityEndMask(Serenity_Instance instance)
+Serenity_Result serenityMaskText(Serenity_Instance instance, const Serenity_MaskTextDesc *desc)
 {
+	SERENITY_UNUSED(desc);
+
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
 
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-
-Serenity_Result serenityDecorateBox(Serenity_Instance instance, const Serenity_DecorationBoxDesc *desc)
+Serenity_Result serenityDecorateRectangle(Serenity_Instance instance, const Serenity_DecorationRectangleDesc *desc)
 {
 	SERENITY_UNUSED(desc);
 

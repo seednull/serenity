@@ -31,7 +31,12 @@
 	#define SERENITY_NULL_HANDLE 0
 #endif
 
+#if !defined(SERENITY_ID_NONE)
+	#define SERENITY_ID_NONE 0
+#endif
+
 #define SERENITY_DEFINE_HANDLE(TYPE) typedef uint64_t TYPE
+#define SERENITY_DEFINE_ID(TYPE) typedef uint64_t TYPE
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,6 +44,11 @@ extern "C" {
 
 // Opaque handles
 SERENITY_DEFINE_HANDLE(Serenity_Instance);
+
+// Ids
+SERENITY_DEFINE_ID(Serenity_ContainerId);
+SERENITY_DEFINE_ID(Serenity_ImageId);
+SERENITY_DEFINE_ID(Serenity_DecorationCustomId);
 
 // Enums
 typedef enum Serenity_Result_t
@@ -118,45 +128,56 @@ typedef struct Serenity_FrameDesc_t
 
 typedef struct Serenity_ContainerDesc_t
 {
-	uint64_t id;
+	Serenity_ContainerId id;
 	Serenity_Rect local_rect;
 } Serenity_ContainerDesc;
 
-typedef struct Serenity_MaskBoxDesc_t
+typedef struct Serenity_MaskRectangleStyle_t
 {
-	uint64_t id;
-	Serenity_AnchoredRect anchored_rect;
+	Serenity_Corners radii;
 	Serenity_Sides falloff;
-} Serenity_MaskBoxDesc;
+} Serenity_MaskRectangleStyle;
+
+typedef struct Serenity_MaskRectangleDesc_t
+{
+	Serenity_AnchoredRect anchored_rect;
+	Serenity_MaskRectangleStyle style;
+} Serenity_MaskRectangleDesc;
 
 typedef struct Serenity_MaskImageDesc_t
 {
-	uint64_t id;
 	Serenity_AnchoredRect anchored_rect;
-	uint64_t image_id;
+	Serenity_ImageId image_id;
 } Serenity_MaskImageDesc;
 
-typedef struct Serenity_DecorationBoxStyle_t
+typedef struct Serenity_MaskTextDesc_t
+{
+	Serenity_AnchoredRect anchored_rect;
+	const char *text;
+	uint64_t text_size;
+} Serenity_MaskTextDesc;
+
+typedef struct Serenity_DecorationRectangleStyle_t
 {
 	Serenity_Corners radii;
 	Serenity_Color color;
-} Serenity_DecorationBoxStyle;
+} Serenity_DecorationRectangleStyle;
 
 typedef struct Serenity_DecorationTextStyle_t
 {
 	Serenity_Color color;
 } Serenity_DecorationTextStyle;
 
-typedef struct Serenity_DecorationBoxDesc_t
+typedef struct Serenity_DecorationRectangleDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
-	Serenity_DecorationBoxStyle style;
-} Serenity_DecorationBoxDesc;
+	Serenity_DecorationRectangleStyle style;
+} Serenity_DecorationRectangleDesc;
 
 typedef struct Serenity_DecorationImageDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
-	uint64_t image_id;
+	Serenity_ImageId image_id;
 } Serenity_DecorationImageDesc;
 
 typedef struct Serenity_DecorationTextDesc_t
@@ -170,6 +191,7 @@ typedef struct Serenity_DecorationTextDesc_t
 typedef struct Serenity_DecorationCustomDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
+	Serenity_DecorationCustomId custom_id;
 	const void *data;
 	uint64_t data_size;
 } Serenity_DecorationCustomDesc;
@@ -196,11 +218,11 @@ SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instance);
 
-SERENITY_APIENTRY Serenity_Result serenityBeginMaskBox(Serenity_Instance instance, const Serenity_MaskBoxDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityBeginMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityEndMask(Serenity_Instance instance);
+SERENITY_APIENTRY Serenity_Result serenityMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityMaskText(Serenity_Instance instance, const Serenity_MaskTextDesc *desc);
 
-SERENITY_APIENTRY Serenity_Result serenityDecorateBox(Serenity_Instance instance, const Serenity_DecorationBoxDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityDecorateRectangle(Serenity_Instance instance, const Serenity_DecorationRectangleDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityDecorateImage(Serenity_Instance instance, const Serenity_DecorationImageDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityDecorateText(Serenity_Instance instance, const Serenity_DecorationTextDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityDecorateCustom(Serenity_Instance instance, const Serenity_DecorationCustomDesc *desc);
