@@ -48,7 +48,7 @@ SERENITY_DEFINE_HANDLE(Serenity_Instance);
 // Ids
 SERENITY_DEFINE_ID(Serenity_ContainerId);
 SERENITY_DEFINE_ID(Serenity_ImageId);
-SERENITY_DEFINE_ID(Serenity_TypeId);
+SERENITY_DEFINE_ID(Serenity_CustomTypeId);
 
 // Enums
 typedef enum Serenity_Result_t
@@ -74,6 +74,7 @@ typedef struct Serenity_InstanceDesc_t
 	uint32_t max_masks;
 	uint32_t max_mask_nesting_depth;
 	uint32_t max_decorations;
+	uint32_t max_custom_data_size;
 	// TODO: text shaping func ptr
 } Serenity_InstanceDesc;
 
@@ -160,7 +161,7 @@ typedef struct Serenity_MaskTextDesc_t
 typedef struct Serenity_MaskCustomDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
-	Serenity_TypeId type_id;
+	Serenity_CustomTypeId type_id;
 	const void *data;
 	uint64_t data_size;
 } Serenity_MaskCustomDesc;
@@ -199,7 +200,7 @@ typedef struct Serenity_DecorationTextDesc_t
 typedef struct Serenity_DecorationCustomDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
-	Serenity_TypeId type_id;
+	Serenity_CustomTypeId type_id;
 	const void *data;
 	uint64_t data_size;
 } Serenity_DecorationCustomDesc;
