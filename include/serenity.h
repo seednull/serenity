@@ -48,6 +48,7 @@ SERENITY_DEFINE_HANDLE(Serenity_Instance);
 // Ids
 SERENITY_DEFINE_ID(Serenity_ContainerId);
 SERENITY_DEFINE_ID(Serenity_ImageId);
+SERENITY_DEFINE_ID(Serenity_FontId);
 SERENITY_DEFINE_ID(Serenity_CustomTypeId);
 
 // Enums
@@ -66,18 +67,35 @@ typedef enum Serenity_Result_t
 	SERENITY_RESULT_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_Result;
 
-// Structs
-typedef struct Serenity_InstanceDesc_t
+typedef enum Serenity_ShapedGlyphFlags_t
 {
-	uint32_t max_containers;
-	uint32_t max_container_nesting_depth;
-	uint32_t max_masks;
-	uint32_t max_mask_nesting_depth;
-	uint32_t max_decorations;
-	uint32_t max_custom_data_size;
-	// TODO: text shaping func ptr
-} Serenity_InstanceDesc;
+	SERENITY_SHAPED_GLYPH_FLAGS_INVISIBLE = 0x00000001,
+	SERENITY_SHAPED_GLYPH_FLAGS_UNSAFE_TO_BREAK = 0x00000002,
 
+	SERENITY_SHAPED_GLYPH_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_ShapedGlyphFlags;
+
+typedef enum Serenity_TextBreakType_t
+{
+	SERENITY_TEXT_BREAK_ALLOWED = 0,
+	SERENITY_TEXT_BREAK_MANDATORY,
+
+	SERENITY_TEXT_BREAK_TYPE_ENUM_MAX,
+	SERENITY_TEXT_BREAK_TYPE_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_TextBreakType;
+
+typedef enum Serenity_RenderCommandType_t
+{
+	SERENITY_RENDER_COMMAND_TYPE_RECTANGLE = 0,
+	SERENITY_RENDER_COMMAND_TYPE_IMAGE,
+	SERENITY_RENDER_COMMAND_TYPE_TEXT,
+	SERENITY_RENDER_COMMAND_TYPE_CUSTOM,
+
+	SERENITY_RENDER_COMMAND_TYPE_ENUM_MAX,
+	SERENITY_RENDER_COMMAND_TYPE_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_RenderCommandType;
+
+// Structs
 typedef struct Serenity_Vec2_t
 {
 	float x;
@@ -122,6 +140,18 @@ typedef struct Serenity_AnchoredRect_t
 	Serenity_Vec2 max_offset;
 } Serenity_AnchoredRect;
 
+typedef struct Serenity_TextSpan_t
+{
+	const char *data;
+	uint32_t length;
+} Serenity_TextSpan;
+
+typedef struct Serenity_FontDesc_t
+{
+	Serenity_FontId id;
+	float line_height; // TODO: abstraction leak, fix this somehow
+} Serenity_FontDesc;
+
 typedef struct Serenity_FrameDesc_t
 {
 	Serenity_Rect root_rect;
@@ -154,8 +184,8 @@ typedef struct Serenity_MaskImageDesc_t
 typedef struct Serenity_MaskTextDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
-	const char *text;
-	uint64_t text_size;
+	Serenity_TextSpan text;
+	Serenity_FontDesc font;
 } Serenity_MaskTextDesc;
 
 typedef struct Serenity_MaskCustomDesc_t
@@ -192,9 +222,9 @@ typedef struct Serenity_DecorationImageDesc_t
 typedef struct Serenity_DecorationTextDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
+	Serenity_TextSpan text;
+	Serenity_FontDesc font;
 	Serenity_DecorationTextStyle style;
-	const char *text;
-	uint64_t text_size;
 } Serenity_DecorationTextDesc;
 
 typedef struct Serenity_DecorationCustomDesc_t
@@ -205,7 +235,98 @@ typedef struct Serenity_DecorationCustomDesc_t
 	uint64_t data_size;
 } Serenity_DecorationCustomDesc;
 
+typedef struct Serenity_ShapedGlyph_t
+{
+	Serenity_FontId font_id;
+	Serenity_ShapedGlyphFlags flags;
+
+	uint32_t glyph_id;
+	uint32_t cluster;
+
+	Serenity_Vec2 advance;
+	Serenity_Vec2 offset;
+	Serenity_Vec2 sizes;
+} Serenity_ShapedGlyph;
+
+typedef struct Serenity_TextBreak_t
+{
+	Serenity_TextBreakType type;
+
+	uint32_t text_end;
+	uint32_t next_text;
+} Serenity_TextBreak;
+
+typedef struct Serenity_RenderCommandDataRectangle_t
+{
+	Serenity_Rect rect;
+	Serenity_DecorationRectangleStyle style;
+} Serenity_RenderCommandDataRectangle;
+
+typedef struct Serenity_RenderCommandDataImage_t
+{
+	Serenity_ImageId id;
+} Serenity_RenderCommandDataImage;
+
+typedef struct Serenity_RenderCommandDataText_t
+{
+	uint64_t first_glyph;
+	uint64_t num_glyphs;
+} Serenity_RenderCommandDataText;
+
+typedef struct Serenity_RenderCommandDataCustom_t
+{
+	Serenity_CustomTypeId type_id;
+	const void *data;
+	uint64_t data_size;
+} Serenity_RenderCommandDataCustom;
+
+typedef union Serenity_RenderCommandData_t
+{
+	Serenity_RenderCommandDataRectangle rectangle;
+	Serenity_RenderCommandDataImage image;
+	Serenity_RenderCommandDataText text;
+	Serenity_RenderCommandDataCustom custom;
+} Serenity_RenderCommandData;
+
+typedef struct Serenity_RenderTransform_t
+{
+	float m[3][2];
+} Serenity_RenderTransform;
+
+typedef struct Serenity_RenderCommand_t
+{
+	Serenity_RenderCommandType type;
+	Serenity_RenderCommandData data;
+
+	uint64_t mask;
+	Serenity_RenderTransform transform;
+} Serenity_RenderCommand;
+
+typedef struct Serenity_RenderGlyph_t
+{
+	Serenity_FontId font_id;
+	uint32_t glyph_id;
+
+	Serenity_Vec2 position;
+	Serenity_Vec2 sizes;
+} Serenity_RenderGlyph;
+
+typedef struct Serenity_RenderData_t
+{
+	uint64_t num_masks;
+	const Serenity_RenderCommand *mask_commands;
+
+	uint64_t num_decorations;
+	const Serenity_RenderCommand *decoration_commands;
+
+	uint64_t num_glyphs;
+	const Serenity_RenderGlyph *glyphs;
+} Serenity_RenderData;
+
 // Function pointers
+typedef Serenity_Result (*PFN_serenityShapeText)(void *user_data, Serenity_TextSpan text, Serenity_FontDesc font, uint32_t max_glyphs, Serenity_ShapedGlyph *glyphs, uint32_t *glyphs_written);
+typedef Serenity_Result (*PFN_serenityBreakText)(void *user_data, Serenity_TextSpan text, uint32_t max_breaks, Serenity_TextBreak *breaks, uint32_t *breaks_written);
+
 // TODO: add function pointers once API surface is finished
 typedef Serenity_Result (*PFN_serenityDestroyInstance)(Serenity_Instance instance);
 
@@ -216,13 +337,27 @@ typedef struct Serenity_InstanceTable_t
 	PFN_serenityDestroyInstance destroyInstance;
 } Serenity_InstanceTable;
 
+typedef struct Serenity_InstanceDesc_t
+{
+	uint32_t max_containers;
+	uint32_t max_container_nesting_depth;
+	uint32_t max_masks;
+	uint32_t max_mask_nesting_depth;
+	uint32_t max_decorations;
+	uint32_t max_custom_data_size;
+
+	PFN_serenityShapeText shapeText;
+	PFN_serenityBreakText breakText;
+	void *user_data;
+} Serenity_InstanceDesc;
+
 // API
 #if !defined(SERENITY_NO_PROTOTYPES)
 SERENITY_APIENTRY Serenity_Result serenityCreateInstance(const Serenity_InstanceDesc *desc, Serenity_Instance* instance);
 SERENITY_APIENTRY Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_InstanceTable *instance_table);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance);
+SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instance);

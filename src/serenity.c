@@ -74,8 +74,10 @@ Serenity_Result serenityBeginMaskCustom(Serenity_Instance instance, const Sereni
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityEndMask(Serenity_Instance instance)
+Serenity_Result serenityEndMask(Serenity_Instance instance, Serenity_RenderData *data)
 {
+	SERENITY_UNUSED(data);
+
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
 
