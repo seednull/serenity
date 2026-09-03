@@ -34,6 +34,45 @@ Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_In
 
 /*
  */
+Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc)
+{
+	SERENITY_UNUSED(desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data)
+{
+	SERENITY_UNUSED(data);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+
+Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc)
+{
+	SERENITY_UNUSED(desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityEndContainer(Serenity_Instance instance)
+{
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
 Serenity_Result serenityBeginMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc)
 {
 	SERENITY_UNUSED(desc);
@@ -74,10 +113,8 @@ Serenity_Result serenityBeginMaskCustom(Serenity_Instance instance, const Sereni
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityEndMask(Serenity_Instance instance, Serenity_RenderData *data)
+Serenity_Result serenityEndMask(Serenity_Instance instance)
 {
-	SERENITY_UNUSED(data);
-
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
 
