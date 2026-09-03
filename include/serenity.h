@@ -84,6 +84,17 @@ typedef enum Serenity_TextBreakType_t
 	SERENITY_TEXT_BREAK_TYPE_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_TextBreakType;
 
+typedef enum Serenity_RenderMaskType_t
+{
+	SERENITY_RENDER_MASK_TYPE_RECTANGLE = 0,
+	SERENITY_RENDER_MASK_TYPE_IMAGE,
+	SERENITY_RENDER_MASK_TYPE_TEXT,
+	SERENITY_RENDER_MASK_TYPE_CUSTOM,
+
+	SERENITY_RENDER_MASK_TYPE_ENUM_MAX,
+	SERENITY_RENDER_MASK_TYPE_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_RenderMaskType;
+
 typedef enum Serenity_RenderCommandType_t
 {
 	SERENITY_RENDER_COMMAND_TYPE_RECTANGLE = 0,
@@ -257,10 +268,57 @@ typedef struct Serenity_TextBreak_t
 	uint32_t next_text;
 } Serenity_TextBreak;
 
+typedef struct Serenity_RenderTransform_t
+{
+	float m[3][2];
+} Serenity_RenderTransform;
+
+typedef struct Serenity_RenderMaskDataRectangle_t
+{
+	Serenity_Corners radii;
+	Serenity_Sides falloff;
+} Serenity_RenderMaskDataRectangle;
+
+typedef struct Serenity_RenderMaskDataImage_t
+{
+	Serenity_ImageId id;
+} Serenity_RenderMaskDataImage;
+
+typedef struct Serenity_RenderMaskDataText_t
+{
+	uint64_t first_glyph;
+	uint64_t num_glyphs;
+} Serenity_RenderMaskDataText;
+
+typedef struct Serenity_RenderMaskDataCustom_t
+{
+	Serenity_CustomTypeId type_id;
+	uint64_t offset;
+	uint64_t size;
+} Serenity_RenderMaskDataCustom;
+
+typedef union Serenity_RenderMaskData_t
+{
+	Serenity_RenderMaskDataRectangle rectangle;
+	Serenity_RenderMaskDataImage image;
+	Serenity_RenderMaskDataText text;
+	Serenity_RenderMaskDataCustom custom;
+} Serenity_RenderMaskData;
+
+typedef struct Serenity_RenderMask_t
+{
+	Serenity_RenderMaskType type;
+	Serenity_RenderMaskData data;
+
+	uint64_t mask;
+	Serenity_Rect local_rect;
+	Serenity_RenderTransform transform;
+} Serenity_RenderMask;
+
 typedef struct Serenity_RenderCommandDataRectangle_t
 {
-	Serenity_Rect rect;
-	Serenity_DecorationRectangleStyle style;
+	Serenity_Corners radii;
+	Serenity_Color color;
 } Serenity_RenderCommandDataRectangle;
 
 typedef struct Serenity_RenderCommandDataImage_t
@@ -272,13 +330,14 @@ typedef struct Serenity_RenderCommandDataText_t
 {
 	uint64_t first_glyph;
 	uint64_t num_glyphs;
+	Serenity_Color color;
 } Serenity_RenderCommandDataText;
 
 typedef struct Serenity_RenderCommandDataCustom_t
 {
 	Serenity_CustomTypeId type_id;
-	const void *data;
-	uint64_t data_size;
+	uint64_t offset;
+	uint64_t size;
 } Serenity_RenderCommandDataCustom;
 
 typedef union Serenity_RenderCommandData_t
@@ -289,17 +348,13 @@ typedef union Serenity_RenderCommandData_t
 	Serenity_RenderCommandDataCustom custom;
 } Serenity_RenderCommandData;
 
-typedef struct Serenity_RenderTransform_t
-{
-	float m[3][2];
-} Serenity_RenderTransform;
-
 typedef struct Serenity_RenderCommand_t
 {
 	Serenity_RenderCommandType type;
 	Serenity_RenderCommandData data;
 
 	uint64_t mask;
+	Serenity_Rect local_rect;
 	Serenity_RenderTransform transform;
 } Serenity_RenderCommand;
 
@@ -314,13 +369,16 @@ typedef struct Serenity_RenderGlyph_t
 typedef struct Serenity_RenderData_t
 {
 	uint64_t num_masks;
-	const Serenity_RenderCommand *mask_commands;
+	const Serenity_RenderMask *masks;
 
-	uint64_t num_decorations;
-	const Serenity_RenderCommand *decoration_commands;
+	uint64_t num_commands;
+	const Serenity_RenderCommand *commands;
 
 	uint64_t num_glyphs;
 	const Serenity_RenderGlyph *glyphs;
+
+	uint64_t custom_data_size;
+	const void *custom_data;
 } Serenity_RenderData;
 
 // Function pointers
