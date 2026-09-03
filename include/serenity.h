@@ -36,7 +36,7 @@
 #endif
 
 #define SERENITY_DEFINE_HANDLE(TYPE) typedef uint64_t TYPE
-#define SERENITY_DEFINE_ID(TYPE) typedef uint64_t TYPE
+#define SERENITY_DEFINE_ID(TYPE) typedef uint32_t TYPE
 
 #ifdef __cplusplus
 extern "C" {
