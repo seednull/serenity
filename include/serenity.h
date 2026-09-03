@@ -245,7 +245,8 @@ typedef struct Serenity_ShapedGlyph_t
 
 	Serenity_Vec2 advance;
 	Serenity_Vec2 offset;
-	Serenity_Vec2 sizes;
+
+	Serenity_Rect local_bounds;
 } Serenity_ShapedGlyph;
 
 typedef struct Serenity_TextBreak_t
@@ -307,8 +308,7 @@ typedef struct Serenity_RenderGlyph_t
 	Serenity_FontId font_id;
 	uint32_t glyph_id;
 
-	Serenity_Vec2 position;
-	Serenity_Vec2 sizes;
+	Serenity_Rect local_rect;
 } Serenity_RenderGlyph;
 
 typedef struct Serenity_RenderData_t
