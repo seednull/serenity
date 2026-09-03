@@ -157,11 +157,12 @@ typedef struct Serenity_TextSpan_t
 	uint32_t length;
 } Serenity_TextSpan;
 
-typedef struct Serenity_FontDesc_t
+typedef struct Serenity_FontMetrics_t
 {
-	Serenity_FontId id;
-	float line_height; // TODO: abstraction leak, fix this somehow
-} Serenity_FontDesc;
+	float ascent;
+	float descent;
+	float line_gap;
+} Serenity_FontMetrics;
 
 typedef struct Serenity_FrameDesc_t
 {
@@ -196,7 +197,7 @@ typedef struct Serenity_MaskTextDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
 	Serenity_TextSpan text;
-	Serenity_FontDesc font;
+	Serenity_FontId font;
 } Serenity_MaskTextDesc;
 
 typedef struct Serenity_MaskCustomDesc_t
@@ -234,7 +235,7 @@ typedef struct Serenity_DecorationTextDesc_t
 {
 	Serenity_AnchoredRect anchored_rect;
 	Serenity_TextSpan text;
-	Serenity_FontDesc font;
+	Serenity_FontId font;
 	Serenity_DecorationTextStyle style;
 } Serenity_DecorationTextDesc;
 
@@ -382,7 +383,8 @@ typedef struct Serenity_RenderData_t
 } Serenity_RenderData;
 
 // Function pointers
-typedef Serenity_Result (*PFN_serenityShapeText)(void *user_data, Serenity_TextSpan text, Serenity_FontDesc font, uint32_t max_glyphs, Serenity_ShapedGlyph *glyphs, uint32_t *glyphs_written);
+typedef Serenity_Result (*PFN_serenityGetFontMetrics)(void *user_data, Serenity_FontId fond, Serenity_FontMetrics *metrics);
+typedef Serenity_Result (*PFN_serenityShapeText)(void *user_data, Serenity_TextSpan text, Serenity_FontId font, uint32_t max_glyphs, Serenity_ShapedGlyph *glyphs, uint32_t *glyphs_written);
 typedef Serenity_Result (*PFN_serenityBreakText)(void *user_data, Serenity_TextSpan text, uint32_t max_breaks, Serenity_TextBreak *breaks, uint32_t *breaks_written);
 
 // TODO: add function pointers once API surface is finished
@@ -404,6 +406,7 @@ typedef struct Serenity_InstanceDesc_t
 	uint32_t max_decorations;
 	uint32_t max_custom_data_size;
 
+	PFN_serenityGetFontMetrics getFontMetrics;
 	PFN_serenityShapeText shapeText;
 	PFN_serenityBreakText breakText;
 	void *user_data;
