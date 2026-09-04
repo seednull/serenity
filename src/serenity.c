@@ -66,11 +66,10 @@ Serenity_Result serenitySetPointerState(Serenity_Instance instance, Serenity_Poi
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityGetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_Vec2 *position, uint32_t *pressed)
+Serenity_Result serenityGetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_PointerState *state)
 {
 	SERENITY_UNUSED(id);
-	SERENITY_UNUSED(position);
-	SERENITY_UNUSED(pressed);
+	SERENITY_UNUSED(state);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -89,10 +88,10 @@ Serenity_Result serenitySetButtonState(Serenity_Instance instance, Serenity_Butt
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityGetButtonState(Serenity_Instance instance, Serenity_ButtonId id, uint32_t *pressed)
+Serenity_Result serenityGetButtonState(Serenity_Instance instance, Serenity_ButtonId id, Serenity_ButtonState *state)
 {
 	SERENITY_UNUSED(id);
-	SERENITY_UNUSED(pressed);
+	SERENITY_UNUSED(state);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -111,10 +110,10 @@ Serenity_Result serenitySetAxisState(Serenity_Instance instance, Serenity_AxisId
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityGetAxisState(Serenity_Instance instance, Serenity_AxisId id, float *value)
+Serenity_Result serenityGetAxisState(Serenity_Instance instance, Serenity_AxisId id, Serenity_AxisState *state)
 {
 	SERENITY_UNUSED(id);
-	SERENITY_UNUSED(value);
+	SERENITY_UNUSED(state);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -228,7 +227,7 @@ Serenity_Result serenityDecorateCustom(Serenity_Instance instance, const Serenit
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityPointerTargetRectangle(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerResponse *response)
+Serenity_Result serenityPointerTargetRectangle(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response)
 {
 	SERENITY_UNUSED(desc);
 	SERENITY_UNUSED(response);
@@ -239,7 +238,7 @@ Serenity_Result serenityPointerTargetRectangle(Serenity_Instance instance, const
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerResponse *response)
+Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response)
 {
 	SERENITY_UNUSED(desc);
 	SERENITY_UNUSED(response);
@@ -251,7 +250,7 @@ Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const S
 }
 
 
-Serenity_Result serenityFocusTarget(Serenity_Instance instance, const Serenity_FocusTargetDesc *desc, Serenity_FocusResponse *response)
+Serenity_Result serenityFocusTarget(Serenity_Instance instance, const Serenity_FocusTargetDesc *desc, Serenity_FocusTargetResponse *response)
 {
 	SERENITY_UNUSED(desc);
 	SERENITY_UNUSED(response);
