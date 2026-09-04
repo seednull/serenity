@@ -132,6 +132,27 @@ typedef enum Serenity_FocusTargetFlags_t
 	SERENITY_FOCUS_TARGET_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_FocusTargetFlags;
 
+typedef enum Serenity_FocusNavigationDirection_t
+{
+	SERENITY_FOCUS_NAVIGATION_DIRECTION_NEGATIVE_X = 0,
+	SERENITY_FOCUS_NAVIGATION_DIRECTION_POSITIVE_X,
+	SERENITY_FOCUS_NAVIGATION_DIRECTION_NEGATIVE_Y,
+	SERENITY_FOCUS_NAVIGATION_DIRECTION_POSITIVE_Y,
+
+	SERENITY_FOCUS_NAVIGATION_DIRECTION_ENUM_MAX,
+	SERENITY_FOCUS_NAVIGATION_DIRECTION_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_FocusNavigationDirection;
+
+typedef enum Serenity_FocusSequenceLinkPolicy_t
+{
+	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_PARALLEL = 0,
+	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_FIRST,
+	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_LAST,
+
+	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_ENUM_MAX,
+	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_FocusSequenceLinkPolicy;
+
 // Structs
 typedef struct Serenity_Vec2_t
 {
@@ -440,18 +461,28 @@ typedef struct Serenity_PointerTargetResponse_t
 	uint32_t hovered;
 	Serenity_PointerState pointer;
 
+	Serenity_Vec2 local_pointer;
 	Serenity_Rect local_rect;
 } Serenity_PointerTargetResponse;
 
 typedef struct Serenity_FocusTargetDesc_t
 {
 	Serenity_FocusTargetId id;
-
-	Serenity_FocusTargetId prev_navigation_x;
-	Serenity_FocusTargetId prev_navigation_y;
-
 	Serenity_FocusTargetFlags flags;
 } Serenity_FocusTargetDesc;
+
+typedef struct Serenity_FocusLinkDesc_t
+{
+	Serenity_FocusTargetId source_id;
+	Serenity_FocusTargetId destination_id;
+	Serenity_FocusNavigationDirection direction;
+} Serenity_FocusLinkDesc;
+
+typedef struct Serenity_FocusSequenceDesc_t
+{
+	uint32_t loop;
+	Serenity_FocusSequenceLinkPolicy link_policy;
+} Serenity_FocusSequenceDesc;
 
 typedef struct Serenity_FocusTargetResponse_t
 {
@@ -535,6 +566,14 @@ SERENITY_APIENTRY Serenity_Result serenityPointerTargetEllipse(Serenity_Instance
 
 SERENITY_APIENTRY Serenity_Result serenityFocusTarget(Serenity_Instance instance, const Serenity_FocusTargetDesc *desc, Serenity_FocusTargetResponse *response);
 SERENITY_APIENTRY Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusTargetId target_id);
+
+SERENITY_APIENTRY Serenity_Result serenityFocusLink(Serenity_Instance instance, const Serenity_FocusLinkDesc *desc);
+
+SERENITY_APIENTRY Serenity_Result serenityBeginFocusRow(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityEndFocusRow(Serenity_Instance instance);
+
+SERENITY_APIENTRY Serenity_Result serenityBeginFocusColumn(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityEndFocusColumn(Serenity_Instance instance);
 
 SERENITY_APIENTRY Serenity_Result serenityDestroyInstance(Serenity_Instance instance);
 #endif
