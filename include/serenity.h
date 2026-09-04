@@ -465,7 +465,7 @@ typedef struct Serenity_FocusTargetResponse_t
 } Serenity_FocusTargetResponse;
 
 // Function pointers
-typedef Serenity_Result (*PFN_serenityGetFontMetrics)(void *user_data, Serenity_FontId fond, Serenity_FontMetrics *metrics);
+typedef Serenity_Result (*PFN_serenityGetFontMetrics)(void *user_data, Serenity_FontId font, Serenity_FontMetrics *metrics);
 typedef Serenity_Result (*PFN_serenityShapeText)(void *user_data, Serenity_TextSpan text, Serenity_FontId font, uint32_t max_glyphs, Serenity_ShapedGlyph *glyphs, uint32_t *glyphs_written);
 typedef Serenity_Result (*PFN_serenityBreakText)(void *user_data, Serenity_TextSpan text, uint32_t max_breaks, Serenity_TextBreak *breaks, uint32_t *breaks_written);
 
