@@ -54,22 +54,11 @@ Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenitySetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_Vec2 position, uint32_t pressed)
+Serenity_Result serenitySetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_Vec2 root_position, uint32_t pressed)
 {
 	SERENITY_UNUSED(id);
-	SERENITY_UNUSED(position);
+	SERENITY_UNUSED(root_position);
 	SERENITY_UNUSED(pressed);
-
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
-Serenity_Result serenityGetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_PointerState *state)
-{
-	SERENITY_UNUSED(id);
-	SERENITY_UNUSED(state);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -88,17 +77,6 @@ Serenity_Result serenitySetButtonState(Serenity_Instance instance, Serenity_Butt
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityGetButtonState(Serenity_Instance instance, Serenity_ButtonId id, Serenity_ButtonState *state)
-{
-	SERENITY_UNUSED(id);
-	SERENITY_UNUSED(state);
-
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
 Serenity_Result serenitySetAxisState(Serenity_Instance instance, Serenity_AxisId id, float value)
 {
 	SERENITY_UNUSED(id);
@@ -110,10 +88,9 @@ Serenity_Result serenitySetAxisState(Serenity_Instance instance, Serenity_AxisId
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityGetAxisState(Serenity_Instance instance, Serenity_AxisId id, Serenity_AxisState *state)
+Serenity_Result serenityAbortPointer(Serenity_Instance instance, Serenity_PointerId pointer_id)
 {
-	SERENITY_UNUSED(id);
-	SERENITY_UNUSED(state);
+	SERENITY_UNUSED(pointer_id);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -121,8 +98,31 @@ Serenity_Result serenityGetAxisState(Serenity_Instance instance, Serenity_AxisId
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityBeginScope(Serenity_Instance instance)
+Serenity_Result serenityAbortButton(Serenity_Instance instance, Serenity_ButtonId button_id)
 {
+	SERENITY_UNUSED(button_id);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId axis_id)
+{
+	SERENITY_UNUSED(axis_id);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityBeginScope(Serenity_Instance instance, const Serenity_ScopeDesc *desc, Serenity_ScopeResponse *response)
+{
+	SERENITY_UNUSED(desc);
+	SERENITY_UNUSED(response);
+
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
 
@@ -137,11 +137,20 @@ Serenity_Result serenityEndScope(Serenity_Instance instance)
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-
-Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_RootDesc *root_desc, const Serenity_ContainerDesc *desc)
+Serenity_Result serenitySetActiveScope(Serenity_Instance instance, Serenity_ScopeId scope_id)
 {
-	SERENITY_UNUSED(root_desc);
+	SERENITY_UNUSED(scope_id);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc)
+{
 	SERENITY_UNUSED(desc);
+	SERENITY_UNUSED(root_desc);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -159,7 +168,58 @@ Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenit
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
+Serenity_Result serenityText(Serenity_Instance instance, const Serenity_ContainerDesc *container_desc, const Serenity_TextDesc *text_desc)
+{
+	SERENITY_UNUSED(container_desc);
+	SERENITY_UNUSED(text_desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
 Serenity_Result serenityEndContainer(Serenity_Instance instance)
+{
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityBeginRootLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc)
+{
+	SERENITY_UNUSED(desc);
+	SERENITY_UNUSED(root_desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityBeginLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc)
+{
+	SERENITY_UNUSED(desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityLayoutText(Serenity_Instance instance, const Serenity_LayoutContainerDesc *container_desc, const Serenity_TextDesc *text_desc)
+{
+	SERENITY_UNUSED(container_desc);
+	SERENITY_UNUSED(text_desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityEndLayoutContainer(Serenity_Instance instance)
 {
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -226,16 +286,6 @@ Serenity_Result serenityDecorateRectangle(Serenity_Instance instance, const Sere
 }
 
 Serenity_Result serenityDecorateImage(Serenity_Instance instance, const Serenity_DecorationImageDesc *desc)
-{
-	SERENITY_UNUSED(desc);
-
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
-Serenity_Result serenityDecorateText(Serenity_Instance instance, const Serenity_DecorationTextDesc *desc)
 {
 	SERENITY_UNUSED(desc);
 
