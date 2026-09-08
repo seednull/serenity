@@ -685,6 +685,9 @@ typedef struct Serenity_InstanceDesc_t
 
 // API
 #if !defined(SERENITY_NO_PROTOTYPES)
+SERENITY_APIENTRY uint32_t serenityHashId(uint32_t seed, const void *data, uint32_t size);
+SERENITY_APIENTRY uint32_t serenityCombineId(uint32_t parent, uint32_t key);
+
 SERENITY_APIENTRY Serenity_Result serenityCreateInstance(const Serenity_InstanceDesc *desc, Serenity_Instance* instance);
 SERENITY_APIENTRY Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_InstanceTable *instance_table);
 

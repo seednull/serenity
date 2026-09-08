@@ -12,6 +12,27 @@ typedef struct Serenity_InstanceInternal_t
 
 /*
  */
+uint32_t serenityHashId(uint32_t seed, const void *data, uint32_t size)
+{
+	SERENITY_UNUSED(seed);
+	SERENITY_UNUSED(data);
+	SERENITY_UNUSED(size);
+
+	// TODO: implement this
+	return SERENITY_ID_NONE;
+}
+
+uint32_t serenityCombineId(uint32_t parent, uint32_t key)
+{
+	SERENITY_UNUSED(parent);
+	SERENITY_UNUSED(key);
+
+	// TODO: implement this
+	return SERENITY_ID_NONE;
+}
+
+/*
+ */
 Serenity_Result serenityCreateInstance(const Serenity_InstanceDesc *desc, Serenity_Instance *instance)
 {
 	return impl_createInstance(desc, instance);
