@@ -291,9 +291,9 @@ typedef struct Serenity_ScopeDesc_t
 
 typedef struct Serenity_RootAttachmentDesc_t
 {
-	Serenity_ContainerId target_container_id;
+	Serenity_ContainerId attachment_container_id;
 
-	Serenity_Vec2 target_anchor;
+	Serenity_Vec2 attachment_anchor;
 	Serenity_Vec2 root_anchor;
 	Serenity_Vec2 root_offset;
 } Serenity_RootAttachmentDesc;
