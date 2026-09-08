@@ -91,6 +91,24 @@ typedef enum Serenity_TextBreakType_t
 	SERENITY_TEXT_BREAK_TYPE_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_TextBreakType;
 
+typedef enum Serenity_RootFlags_t
+{
+	SERENITY_ROOT_FLAGS_NONE = 0,
+	SERENITY_ROOT_FLAGS_INHERIT_TARGET_TRANSFORM = 0x00000001,
+	SERENITY_ROOT_FLAGS_INHERIT_TARGET_MASK = 0x00000002,
+
+	SERENITY_ROOT_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_RootFlags;
+
+typedef enum Serenity_ContainerPlacementType_t
+{
+	SERENITY_CONTAINER_PLACEMENT_TYPE_LOCAL_RECT = 0,
+	SERENITY_CONTAINER_PLACEMENT_TYPE_ANCHORED_RECT,
+
+	SERENITY_CONTAINER_PLACEMENT_TYPE_ENUM_MAX,
+	SERENITY_CONTAINER_PLACEMENT_TYPE_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_ContainerPlacementType;
+
 typedef enum Serenity_RenderMaskType_t
 {
 	SERENITY_RENDER_MASK_TYPE_RECTANGLE = 0,
@@ -211,15 +229,51 @@ typedef struct Serenity_FontMetrics_t
 	float line_gap;
 } Serenity_FontMetrics;
 
+typedef struct Serenity_Transform_t
+{
+	Serenity_Vec2 anchor;
+	Serenity_Vec2 offset;
+	Serenity_Vec2 scale;
+	float angle;
+} Serenity_Transform;
+
 typedef struct Serenity_FrameDesc_t
 {
 	Serenity_Rect root_rect;
 } Serenity_FrameDesc;
 
+typedef struct Serenity_RootAttachmentDesc_t
+{
+	Serenity_ContainerId target_container_id;
+
+	Serenity_Vec2 target_anchor;
+	Serenity_Vec2 root_anchor;
+	Serenity_Vec2 root_offset;
+} Serenity_RootAttachmentDesc;
+
+typedef struct Serenity_RootDesc_t
+{
+	Serenity_RootFlags flags;
+	Serenity_RootAttachmentDesc attachment;
+} Serenity_RootDesc;
+
+typedef union Serenity_ContainerPlacementData_t
+{
+	Serenity_Rect local_rect;
+	Serenity_AnchoredRect anchored_rect;
+} Serenity_ContainerPlacementData;
+
+typedef struct Serenity_ContainerPlacement_t
+{
+	Serenity_ContainerPlacementType type;
+	Serenity_ContainerPlacementData data;
+} Serenity_ContainerPlacement;
+
 typedef struct Serenity_ContainerDesc_t
 {
 	Serenity_ContainerId id;
-	Serenity_Rect local_rect;
+	Serenity_ContainerPlacement placement;
+	Serenity_Transform transform;
 } Serenity_ContainerDesc;
 
 typedef struct Serenity_MaskRectangleStyle_t
@@ -547,6 +601,10 @@ SERENITY_APIENTRY Serenity_Result serenityGetButtonState(Serenity_Instance insta
 SERENITY_APIENTRY Serenity_Result serenitySetAxisState(Serenity_Instance instance, Serenity_AxisId id, float value);
 SERENITY_APIENTRY Serenity_Result serenityGetAxisState(Serenity_Instance instance, Serenity_AxisId id, Serenity_AxisState *state);
 
+SERENITY_APIENTRY Serenity_Result serenityBeginScope(Serenity_Instance instance);
+SERENITY_APIENTRY Serenity_Result serenityEndScope(Serenity_Instance instance);
+
+SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_RootDesc *root_desc, const Serenity_ContainerDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instance);
 

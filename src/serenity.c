@@ -121,6 +121,34 @@ Serenity_Result serenityGetAxisState(Serenity_Instance instance, Serenity_AxisId
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
+Serenity_Result serenityBeginScope(Serenity_Instance instance)
+{
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityEndScope(Serenity_Instance instance)
+{
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+
+Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_RootDesc *root_desc, const Serenity_ContainerDesc *desc)
+{
+	SERENITY_UNUSED(root_desc);
+	SERENITY_UNUSED(desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
 Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc)
 {
 	SERENITY_UNUSED(desc);
