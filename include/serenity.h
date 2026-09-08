@@ -128,6 +128,25 @@ typedef enum Serenity_ContainerPlacementType_t
 	SERENITY_CONTAINER_PLACEMENT_TYPE_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_ContainerPlacementType;
 
+typedef enum Serenity_LayoutFlow_t
+{
+	SERENITY_LAYOUT_FLOW_HORIZONTAL = 0,
+	SERENITY_LAYOUT_FLOW_VERTICAL,
+
+	SERENITY_LAYOUT_FLOW_ENUM_MAX,
+	SERENITY_LAYOUT_FLOW_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_LayoutFlow;
+
+typedef enum Serenity_LayoutSizeMode_t
+{
+	SERENITY_LAYOUT_SIZE_MODE_FIT = 0,
+	SERENITY_LAYOUT_SIZE_MODE_GROW,
+	SERENITY_LAYOUT_SIZE_MODE_FIXED,
+
+	SERENITY_LAYOUT_SIZE_MODE_ENUM_MAX,
+	SERENITY_LAYOUT_SIZE_MODE_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_LayoutSizeMode;
+
 typedef enum Serenity_RenderMaskType_t
 {
 	SERENITY_RENDER_MASK_TYPE_RECTANGLE = 0,
@@ -303,6 +322,33 @@ typedef struct Serenity_ContainerDesc_t
 	Serenity_ContainerPlacement placement;
 	Serenity_Transform transform;
 } Serenity_ContainerDesc;
+
+typedef struct Serenity_LayoutSize_t
+{
+	Serenity_LayoutSizeMode mode;
+	float value;
+	float min_size;
+	float max_size;
+} Serenity_LayoutSize;
+
+typedef struct Serenity_LayoutDesc_t
+{
+	Serenity_LayoutFlow flow;
+	Serenity_Sides padding;
+	Serenity_Vec2 alignment;
+	float gap;
+} Serenity_LayoutDesc;
+
+typedef struct Serenity_LayoutContainerDesc_t
+{
+	Serenity_ContainerId id;
+
+	Serenity_LayoutSize width;
+	Serenity_LayoutSize height;
+
+	Serenity_LayoutDesc layout;
+	Serenity_Transform transform;
+} Serenity_LayoutContainerDesc;
 
 typedef struct Serenity_TextFormat_t
 {
@@ -657,11 +703,15 @@ SERENITY_APIENTRY Serenity_Result serenityBeginScope(Serenity_Instance instance,
 SERENITY_APIENTRY Serenity_Result serenityEndScope(Serenity_Instance instance);
 SERENITY_APIENTRY Serenity_Result serenitySetActiveScope(Serenity_Instance instance, Serenity_ScopeId scope_id);
 
-SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_RootDesc *root_desc, const Serenity_ContainerDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityText(Serenity_Instance instance, const Serenity_ContainerDesc *container_desc, const Serenity_TextDesc *text_desc);
 SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instance);
 
-SERENITY_APIENTRY Serenity_Result serenityText(Serenity_Instance instance, const Serenity_ContainerDesc *container_desc, const Serenity_TextDesc *text_desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginRootLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityLayoutText(Serenity_Instance instance, const Serenity_LayoutContainerDesc *container_desc, const Serenity_TextDesc *text_desc);
+SERENITY_APIENTRY Serenity_Result serenityEndLayoutContainer(Serenity_Instance instance);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginMaskImage(Serenity_Instance instance, const Serenity_MaskImageDesc *desc);
