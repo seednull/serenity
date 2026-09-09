@@ -182,15 +182,16 @@ typedef enum Serenity_InputState_t
 	SERENITY_INPUT_STATE_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_InputState;
 
-typedef enum Serenity_FocusTargetFlags_t
+typedef enum Serenity_FocusCaptureFlags_t
 {
-	SERENITY_FOCUS_TARGET_FLAGS_CAPTURE_NAVIGATION_X = 0x00000001,
-	SERENITY_FOCUS_TARGET_FLAGS_CAPTURE_NAVIGATION_Y = 0x00000002,
-	SERENITY_FOCUS_TARGET_FLAGS_CAPTURE_CANCEL = 0x00000004,
-	SERENITY_FOCUS_TARGET_FLAGS_PREFER_IF_NONE = 0x00000008,
+	SERENITY_FOCUS_CAPTURE_FLAGS_NONE = 0,
 
-	SERENITY_FOCUS_TARGET_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
-} Serenity_FocusTargetFlags;
+	SERENITY_FOCUS_CAPTURE_FLAGS_NAVIGATION_X = 0x00000001,
+	SERENITY_FOCUS_CAPTURE_FLAGS_NAVIGATION_Y = 0x00000002,
+	SERENITY_FOCUS_CAPTURE_FLAGS_CANCEL = 0x00000004,
+
+	SERENITY_FOCUS_CAPTURE_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_FocusCaptureFlags;
 
 typedef enum Serenity_FocusNavigationDirection_t
 {
@@ -622,7 +623,9 @@ typedef struct Serenity_PointerTargetResponse_t
 typedef struct Serenity_FocusTargetDesc_t
 {
 	Serenity_FocusTargetId id;
-	Serenity_FocusTargetFlags flags;
+
+	Serenity_FocusCaptureFlags capture;
+	Serenity_FocusCaptureFlags activate_capture;
 } Serenity_FocusTargetDesc;
 
 typedef struct Serenity_FocusLinkDesc_t
