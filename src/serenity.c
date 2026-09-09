@@ -12,6 +12,85 @@ typedef struct Serenity_InstanceInternal_t
 
 /*
  */
+Serenity_Transform serenityIdentityTransform()
+{
+	Serenity_Transform result;
+
+	result.anchor.x = 0.0f;
+	result.anchor.y = 0.0f;
+	result.offset.x = 0.0f;
+	result.offset.y = 0.0f;
+	result.scale.x = 1.0f;
+	result.scale.y = 1.0f;
+	result.angle = 0.0f;
+
+	return result;
+}
+
+Serenity_LayoutSize serenityLayoutFit()
+{
+	Serenity_LayoutSize result;
+
+	result.mode = SERENITY_LAYOUT_SIZE_MODE_FIT;
+	result.value = 0.0f;
+	result.min_size = 0.0f;
+	result.max_size = 0.0f;
+
+	return result;
+}
+
+Serenity_LayoutSize serenityLayoutFlex()
+{
+	Serenity_LayoutSize result;
+
+	result.mode = SERENITY_LAYOUT_SIZE_MODE_FLEX;
+	result.value = 1.0f;
+	result.min_size = 0.0f;
+	result.max_size = 0.0f;
+
+	return result;
+}
+
+Serenity_LayoutSize serenityLayoutFlexWeighted(float weight)
+{
+	Serenity_LayoutSize result;
+
+	result.mode = SERENITY_LAYOUT_SIZE_MODE_FLEX;
+	result.value = weight;
+	result.min_size = 0.0f;
+	result.max_size = 0.0f;
+
+	return result;
+}
+
+Serenity_LayoutSize serenityLayoutFixed(float value)
+{
+	Serenity_LayoutSize result;
+
+	result.mode = SERENITY_LAYOUT_SIZE_MODE_FIXED;
+	result.value = value;
+	result.min_size = 0.0f;
+	result.max_size = 0.0f;
+
+	return result;
+}
+
+Serenity_AnchoredRect serenityAnchoredFill(float inset)
+{
+	Serenity_AnchoredRect result;
+
+	result.min_anchor.x = 0.0f;
+	result.min_anchor.y = 0.0f;
+	result.max_anchor.x = 1.0f;
+	result.max_anchor.y = 1.0f;
+	result.min_offset.x = inset;
+	result.min_offset.y = inset;
+	result.max_offset.x = -inset;
+	result.max_offset.y = -inset;
+
+	return result;
+}
+
 uint32_t serenityHashId(uint32_t seed, const void *data, uint32_t size)
 {
 	SERENITY_UNUSED(seed);
@@ -29,6 +108,14 @@ uint32_t serenityCombineId(uint32_t parent, uint32_t key)
 
 	// TODO: implement this
 	return SERENITY_ID_NONE;
+}
+
+uint64_t serenityGetRequiredMemory(const Serenity_CapacityDesc *capacity)
+{
+	SERENITY_UNUSED(capacity);
+
+	// TODO: implement this
+	return 0;
 }
 
 /*

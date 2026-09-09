@@ -64,10 +64,12 @@ typedef enum Serenity_Result_t
 {
 	SERENITY_SUCCESS = 0,
 	SERENITY_REPEAT,
-
+	SERENITY_INTERACTION_LOCKED,
+	
 	SERENITY_NOT_IMPLEMENTED,
 	SERENITY_INVALID_INSTANCE,
 	SERENITY_INVALID_OUTPUT_ARGUMENT,
+	SERENITY_INSUFFICIENT_CAPACITY,
 
 	// FIXME: add more error codes for internal errors
 	SERENITY_INTERNAL_ERROR,
@@ -141,7 +143,7 @@ typedef enum Serenity_LayoutFlow_t
 typedef enum Serenity_LayoutSizeMode_t
 {
 	SERENITY_LAYOUT_SIZE_MODE_FIT = 0,
-	SERENITY_LAYOUT_SIZE_MODE_GROW,
+	SERENITY_LAYOUT_SIZE_MODE_FLEX,
 	SERENITY_LAYOUT_SIZE_MODE_FIXED,
 
 	SERENITY_LAYOUT_SIZE_MODE_ENUM_MAX,
@@ -269,6 +271,12 @@ typedef struct Serenity_Transform_t
 	Serenity_Vec2 scale;
 	float angle;
 } Serenity_Transform;
+
+typedef struct Serenity_CapacityDesc_t
+{
+	uint32_t max_elements;
+	uint64_t max_frame_arena_size;
+} Serenity_CapacityDesc;
 
 typedef struct Serenity_FrameDesc_t
 {
@@ -644,8 +652,8 @@ typedef struct Serenity_FocusTargetResponse_t
 
 // Function pointers
 typedef Serenity_Result (*PFN_serenityGetFontMetrics)(void *user_data, Serenity_FontId font, Serenity_FontMetrics *metrics);
-typedef Serenity_Result (*PFN_serenityShapeText)(void *user_data, Serenity_TextSpan text, Serenity_FontId font, uint32_t max_glyphs, Serenity_ShapedGlyph *glyphs, uint32_t *glyphs_written);
-typedef Serenity_Result (*PFN_serenityBreakText)(void *user_data, Serenity_TextSpan text, uint32_t max_breaks, Serenity_TextBreak *breaks, uint32_t *breaks_written);
+typedef Serenity_Result (*PFN_serenityShapeText)(void *user_data, Serenity_TextSpan text, Serenity_FontId font, uint32_t max_glyphs, Serenity_ShapedGlyph *glyphs, uint32_t *glyphs_count);
+typedef Serenity_Result (*PFN_serenityBreakText)(void *user_data, Serenity_TextSpan text, uint32_t max_breaks, Serenity_TextBreak *breaks, uint32_t *breaks_count);
 
 // TODO: add function pointers once API surface is finished
 typedef Serenity_Result (*PFN_serenityDestroyInstance)(Serenity_Instance instance);
@@ -659,12 +667,9 @@ typedef struct Serenity_InstanceTable_t
 
 typedef struct Serenity_InstanceDesc_t
 {
-	uint32_t max_containers;
-	uint32_t max_container_nesting_depth;
-	uint32_t max_masks;
-	uint32_t max_mask_nesting_depth;
-	uint32_t max_decorations;
-	uint32_t max_custom_data_size;
+	Serenity_CapacityDesc capacity;
+	void *memory;
+	uint64_t memory_size;
 
 	PFN_serenityGetFontMetrics getFontMetrics;
 	PFN_serenityShapeText shapeText;
@@ -678,13 +683,21 @@ typedef struct Serenity_InstanceDesc_t
 } Serenity_InstanceDesc;
 
 // API
-#if !defined(SERENITY_NO_PROTOTYPES)
+SERENITY_APIENTRY Serenity_Transform serenityIdentityTransform();
+SERENITY_APIENTRY Serenity_LayoutSize serenityLayoutFit();
+SERENITY_APIENTRY Serenity_LayoutSize serenityLayoutFlex();
+SERENITY_APIENTRY Serenity_LayoutSize serenityLayoutFlexWeighted(float weight);
+SERENITY_APIENTRY Serenity_LayoutSize serenityLayoutFixed(float value);
+SERENITY_APIENTRY Serenity_AnchoredRect serenityAnchoredFill(float inset);
+
 SERENITY_APIENTRY uint32_t serenityHashId(uint32_t seed, const void *data, uint32_t size);
 SERENITY_APIENTRY uint32_t serenityCombineId(uint32_t parent, uint32_t key);
+SERENITY_APIENTRY uint64_t serenityGetRequiredMemory(const Serenity_CapacityDesc *capacity);
 
 SERENITY_APIENTRY Serenity_Result serenityCreateInstance(const Serenity_InstanceDesc *desc, Serenity_Instance* instance);
 SERENITY_APIENTRY Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_InstanceTable *instance_table);
 
+#if !defined(SERENITY_NO_PROTOTYPES)
 SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data);
 
