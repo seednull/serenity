@@ -287,6 +287,7 @@ typedef struct Serenity_FrameDesc_t
 typedef struct Serenity_ScopeDesc_t
 {
 	Serenity_ScopeId id;
+	uint32_t receive_pointer;
 } Serenity_ScopeDesc;
 
 typedef struct Serenity_RootAttachmentDesc_t
@@ -602,6 +603,8 @@ typedef struct Serenity_AxisState_t
 typedef struct Serenity_ScopeResponse_t
 {
 	uint32_t active;
+
+	Serenity_PointerState pointer;
 
 	Serenity_ButtonState activate;
 	Serenity_ButtonState cancel;
