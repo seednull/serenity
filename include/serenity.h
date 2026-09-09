@@ -204,16 +204,6 @@ typedef enum Serenity_FocusNavigationDirection_t
 	SERENITY_FOCUS_NAVIGATION_DIRECTION_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_FocusNavigationDirection;
 
-typedef enum Serenity_FocusSequenceLinkPolicy_t
-{
-	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_PARALLEL = 0,
-	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_FIRST,
-	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_LAST,
-
-	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_ENUM_MAX,
-	SERENITY_FOCUS_SEQUENCE_LINK_POLICY_ENUM_FORCE32 = 0x7FFFFFFF,
-} Serenity_FocusSequenceLinkPolicy;
-
 // Structs
 typedef struct Serenity_Vec2_t
 {
@@ -638,7 +628,6 @@ typedef struct Serenity_FocusLinkDesc_t
 typedef struct Serenity_FocusSequenceDesc_t
 {
 	uint32_t loop;
-	Serenity_FocusSequenceLinkPolicy link_policy;
 } Serenity_FocusSequenceDesc;
 
 typedef struct Serenity_FocusTargetResponse_t
