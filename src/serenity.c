@@ -295,10 +295,22 @@ Serenity_Result serenityEndContainer(Serenity_Instance instance)
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityBeginRootLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc)
+Serenity_Result serenityBeginLayoutRootContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc)
 {
 	SERENITY_UNUSED(desc);
 	SERENITY_UNUSED(root_desc);
+
+	if (instance == SERENITY_NULL_HANDLE)
+		return SERENITY_INVALID_INSTANCE;
+
+	return SERENITY_NOT_IMPLEMENTED;
+}
+
+Serenity_Result serenityBeginLayoutScrollContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, Serenity_Vec2 offset, Serenity_ScrollResponse *response)
+{
+	SERENITY_UNUSED(desc);
+	SERENITY_UNUSED(offset);
+	SERENITY_UNUSED(response);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;

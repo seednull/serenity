@@ -350,6 +350,13 @@ typedef struct Serenity_LayoutContainerDesc_t
 	Serenity_Transform transform;
 } Serenity_LayoutContainerDesc;
 
+typedef struct Serenity_ScrollResponse_t
+{
+	Serenity_Vec2 viewport_extent;
+	Serenity_Vec2 content_extent;
+	Serenity_Vec2 offset;
+} Serenity_ScrollResponse;
+
 typedef struct Serenity_TextFormat_t
 {
 	Serenity_Vec2 alignment;
@@ -718,7 +725,8 @@ SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance insta
 SERENITY_APIENTRY Serenity_Result serenityText(Serenity_Instance instance, const Serenity_ContainerDesc *container_desc, const Serenity_TextDesc *text_desc);
 SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instance);
 
-SERENITY_APIENTRY Serenity_Result serenityBeginRootLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginLayoutRootContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginLayoutScrollContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, Serenity_Vec2 offset, Serenity_ScrollResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityBeginLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityLayoutText(Serenity_Instance instance, const Serenity_LayoutContainerDesc *container_desc, const Serenity_TextDesc *text_desc);
 SERENITY_APIENTRY Serenity_Result serenityEndLayoutContainer(Serenity_Instance instance);
