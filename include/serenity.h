@@ -598,6 +598,7 @@ typedef struct Serenity_ScopeResponse_t
 typedef struct Serenity_PointerTargetDesc_t
 {
 	Serenity_PointerTargetId id;
+	Serenity_FocusTargetId focus_target_id;
 	Serenity_AnchoredRect anchored_rect;
 } Serenity_PointerTargetDesc;
 
