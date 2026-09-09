@@ -113,6 +113,14 @@ typedef enum Serenity_TextWrap_t
 	SERENITY_TEXT_WRAP_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_TextWrap;
 
+typedef enum Serenity_ScopeFlags_t
+{
+	SERENITY_SCOPE_FLAGS_NONE = 0,
+	SERENITY_SCOPE_FLAGS_RECEIVE_POINTER = 0x00000001,
+
+	SERENITY_SCOPE_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_ScopeFlags;
+
 typedef enum Serenity_RootFlags_t
 {
 	SERENITY_ROOT_FLAGS_NONE = 0,
@@ -287,7 +295,7 @@ typedef struct Serenity_FrameDesc_t
 typedef struct Serenity_ScopeDesc_t
 {
 	Serenity_ScopeId id;
-	uint32_t receive_pointer;
+	Serenity_ScopeFlags flags;
 } Serenity_ScopeDesc;
 
 typedef struct Serenity_RootAttachmentDesc_t
