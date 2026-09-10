@@ -46,7 +46,6 @@ extern "C" {
 SERENITY_DEFINE_HANDLE(Serenity_Instance);
 
 // Ids
-SERENITY_DEFINE_ID(Serenity_ScopeId);
 SERENITY_DEFINE_ID(Serenity_ContainerId);
 SERENITY_DEFINE_ID(Serenity_PointerTargetId);
 SERENITY_DEFINE_ID(Serenity_FocusTargetId);
@@ -112,14 +111,6 @@ typedef enum Serenity_TextWrap_t
 	SERENITY_TEXT_WRAP_ENUM_MAX,
 	SERENITY_TEXT_WRAP_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_TextWrap;
-
-typedef enum Serenity_ScopeFlags_t
-{
-	SERENITY_SCOPE_FLAGS_NONE = 0,
-	SERENITY_SCOPE_FLAGS_RECEIVE_POINTER = 0x00000001,
-
-	SERENITY_SCOPE_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
-} Serenity_ScopeFlags;
 
 typedef enum Serenity_RootFlags_t
 {
@@ -292,12 +283,6 @@ typedef struct Serenity_FrameDesc_t
 	Serenity_InteractionMode interaction_mode;
 } Serenity_FrameDesc;
 
-typedef struct Serenity_ScopeDesc_t
-{
-	Serenity_ScopeId id;
-	Serenity_ScopeFlags flags;
-} Serenity_ScopeDesc;
-
 typedef struct Serenity_RootAttachmentDesc_t
 {
 	Serenity_ContainerId attachment_container_id;
@@ -311,6 +296,7 @@ typedef struct Serenity_RootDesc_t
 {
 	Serenity_RootFlags flags;
 	Serenity_RootAttachmentDesc attachment;
+	int32_t z_order;
 } Serenity_RootDesc;
 
 typedef union Serenity_ContainerPlacementData_t
@@ -608,10 +594,8 @@ typedef struct Serenity_AxisState_t
 	Serenity_InputState positive_state;
 } Serenity_AxisState;
 
-typedef struct Serenity_ScopeResponse_t
+typedef struct Serenity_FrameResponse_t
 {
-	uint32_t active;
-
 	Serenity_PointerState pointer;
 
 	Serenity_ButtonState activate;
@@ -619,7 +603,12 @@ typedef struct Serenity_ScopeResponse_t
 
 	Serenity_AxisState navigation_x;
 	Serenity_AxisState navigation_y;
-} Serenity_ScopeResponse;
+} Serenity_FrameResponse;
+
+typedef struct Serenity_PointerFallbackResponse_t
+{
+	Serenity_PointerState pointer;
+} Serenity_PointerFallbackResponse;
 
 typedef struct Serenity_PointerTargetDesc_t
 {
@@ -716,7 +705,7 @@ SERENITY_APIENTRY Serenity_Result serenityCreateInstance(const Serenity_Instance
 SERENITY_APIENTRY Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_InstanceTable *instance_table);
 
 #if !defined(SERENITY_NO_PROTOTYPES)
-SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc, Serenity_FrameResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data);
 
 SERENITY_APIENTRY Serenity_Result serenitySetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_Vec2 root_position, uint32_t pressed);
@@ -727,9 +716,7 @@ SERENITY_APIENTRY Serenity_Result serenityAbortPointer(Serenity_Instance instanc
 SERENITY_APIENTRY Serenity_Result serenityAbortButton(Serenity_Instance instance, Serenity_ButtonId button_id);
 SERENITY_APIENTRY Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId axis_id);
 
-SERENITY_APIENTRY Serenity_Result serenityBeginScope(Serenity_Instance instance, const Serenity_ScopeDesc *desc, Serenity_ScopeResponse *response);
-SERENITY_APIENTRY Serenity_Result serenityEndScope(Serenity_Instance instance);
-SERENITY_APIENTRY Serenity_Result serenitySetActiveScope(Serenity_Instance instance, Serenity_ScopeId scope_id);
+SERENITY_APIENTRY Serenity_Result serenityPointerFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerFallbackResponse *response);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);

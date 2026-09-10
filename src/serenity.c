@@ -142,9 +142,10 @@ Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_In
 
 /*
  */
-Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc)
+Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc, Serenity_FrameResponse *response)
 {
 	SERENITY_UNUSED(desc);
+	SERENITY_UNUSED(response);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -226,28 +227,10 @@ Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId ax
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityBeginScope(Serenity_Instance instance, const Serenity_ScopeDesc *desc, Serenity_ScopeResponse *response)
+Serenity_Result serenityPointerFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerFallbackResponse *response)
 {
-	SERENITY_UNUSED(desc);
+	SERENITY_UNUSED(z_order);
 	SERENITY_UNUSED(response);
-
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
-Serenity_Result serenityEndScope(Serenity_Instance instance)
-{
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
-Serenity_Result serenitySetActiveScope(Serenity_Instance instance, Serenity_ScopeId scope_id)
-{
-	SERENITY_UNUSED(scope_id);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
