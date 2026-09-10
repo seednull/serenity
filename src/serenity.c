@@ -142,10 +142,9 @@ Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_In
 
 /*
  */
-Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc, Serenity_FrameResponse *response)
+Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc)
 {
 	SERENITY_UNUSED(desc);
-	SERENITY_UNUSED(response);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -227,7 +226,7 @@ Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId ax
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityPointerFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerFallbackResponse *response)
+Serenity_Result serenityPointerTargetFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerTargetFallbackResponse *response)
 {
 	SERENITY_UNUSED(z_order);
 	SERENITY_UNUSED(response);
@@ -430,7 +429,7 @@ Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const S
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityFocusTarget(Serenity_Instance instance, const Serenity_FocusTargetDesc *desc, Serenity_FocusTargetResponse *response)
+Serenity_Result serenityFocusNode(Serenity_Instance instance, const Serenity_FocusNodeDesc *desc, Serenity_FocusNodeResponse *response)
 {
 	SERENITY_UNUSED(desc);
 	SERENITY_UNUSED(response);
@@ -441,9 +440,9 @@ Serenity_Result serenityFocusTarget(Serenity_Instance instance, const Serenity_F
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusTargetId target_id)
+Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusNodeId node_id)
 {
-	SERENITY_UNUSED(target_id);
+	SERENITY_UNUSED(node_id);
 
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;
@@ -461,7 +460,7 @@ Serenity_Result serenityFocusLink(Serenity_Instance instance, const Serenity_Foc
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityBeginFocusRow(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc)
+Serenity_Result serenityBeginFocusSequence(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc)
 {
 	SERENITY_UNUSED(desc);
 
@@ -471,25 +470,7 @@ Serenity_Result serenityBeginFocusRow(Serenity_Instance instance, const Serenity
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityEndFocusRow(Serenity_Instance instance)
-{
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
-Serenity_Result serenityBeginFocusColumn(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc)
-{
-	SERENITY_UNUSED(desc);
-
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
-Serenity_Result serenityEndFocusColumn(Serenity_Instance instance)
+Serenity_Result serenityEndFocusSequence(Serenity_Instance instance)
 {
 	if (instance == SERENITY_NULL_HANDLE)
 		return SERENITY_INVALID_INSTANCE;

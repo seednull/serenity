@@ -48,7 +48,7 @@ SERENITY_DEFINE_HANDLE(Serenity_Instance);
 // Ids
 SERENITY_DEFINE_ID(Serenity_ContainerId);
 SERENITY_DEFINE_ID(Serenity_PointerTargetId);
-SERENITY_DEFINE_ID(Serenity_FocusTargetId);
+SERENITY_DEFINE_ID(Serenity_FocusNodeId);
 
 SERENITY_DEFINE_ID(Serenity_ImageId);
 SERENITY_DEFINE_ID(Serenity_FontId);
@@ -63,7 +63,6 @@ typedef enum Serenity_Result_t
 {
 	SERENITY_SUCCESS = 0,
 	SERENITY_REPEAT,
-	SERENITY_INTERACTION_LOCKED,
 	
 	SERENITY_NOT_IMPLEMENTED,
 	SERENITY_INVALID_INSTANCE,
@@ -132,8 +131,10 @@ typedef enum Serenity_ContainerPlacementType_t
 
 typedef enum Serenity_LayoutFlow_t
 {
-	SERENITY_LAYOUT_FLOW_HORIZONTAL = 0,
-	SERENITY_LAYOUT_FLOW_VERTICAL,
+	SERENITY_LAYOUT_FLOW_LEFT_TO_RIGHT = 0,
+	SERENITY_LAYOUT_FLOW_RIGHT_TO_LEFT,
+	SERENITY_LAYOUT_FLOW_TOP_TO_BOTTOM,
+	SERENITY_LAYOUT_FLOW_BOTTOM_TO_TOP,
 
 	SERENITY_LAYOUT_FLOW_ENUM_MAX,
 	SERENITY_LAYOUT_FLOW_ENUM_FORCE32 = 0x7FFFFFFF,
@@ -189,21 +190,35 @@ typedef enum Serenity_FocusCaptureFlags_t
 
 	SERENITY_FOCUS_CAPTURE_FLAGS_NAVIGATION_X = 0x00000001,
 	SERENITY_FOCUS_CAPTURE_FLAGS_NAVIGATION_Y = 0x00000002,
-	SERENITY_FOCUS_CAPTURE_FLAGS_CANCEL = 0x00000004,
+	SERENITY_FOCUS_CAPTURE_FLAGS_ACTIVATE = 0x00000004,
+	SERENITY_FOCUS_CAPTURE_FLAGS_CANCEL = 0x00000008,
 
 	SERENITY_FOCUS_CAPTURE_FLAGS_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_FocusCaptureFlags;
 
-typedef enum Serenity_FocusNavigationDirection_t
+typedef enum Serenity_FocusAction_t
 {
-	SERENITY_FOCUS_NAVIGATION_DIRECTION_NEGATIVE_X = 0,
-	SERENITY_FOCUS_NAVIGATION_DIRECTION_POSITIVE_X,
-	SERENITY_FOCUS_NAVIGATION_DIRECTION_NEGATIVE_Y,
-	SERENITY_FOCUS_NAVIGATION_DIRECTION_POSITIVE_Y,
+	SERENITY_FOCUS_ACTION_LEFT = 0,
+	SERENITY_FOCUS_ACTION_RIGHT,
+	SERENITY_FOCUS_ACTION_UP,
+	SERENITY_FOCUS_ACTION_DOWN,
+	SERENITY_FOCUS_ACTION_ACTIVATE,
+	SERENITY_FOCUS_ACTION_CANCEL,
 
-	SERENITY_FOCUS_NAVIGATION_DIRECTION_ENUM_MAX,
-	SERENITY_FOCUS_NAVIGATION_DIRECTION_ENUM_FORCE32 = 0x7FFFFFFF,
-} Serenity_FocusNavigationDirection;
+	SERENITY_FOCUS_ACTION_ENUM_MAX,
+	SERENITY_FOCUS_ACTION_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_FocusAction;
+
+typedef enum Serenity_FocusSequenceFlow_t
+{
+	SERENITY_FOCUS_SEQUENCE_FLOW_LEFT_TO_RIGHT = 0,
+	SERENITY_FOCUS_SEQUENCE_FLOW_RIGHT_TO_LEFT,
+	SERENITY_FOCUS_SEQUENCE_FLOW_TOP_TO_BOTTOM,
+	SERENITY_FOCUS_SEQUENCE_FLOW_BOTTOM_TO_TOP,
+
+	SERENITY_FOCUS_SEQUENCE_FLOW_ENUM_MAX,
+	SERENITY_FOCUS_SEQUENCE_FLOW_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_FocusSequenceFlow;
 
 // Structs
 typedef struct Serenity_Vec2_t
@@ -594,26 +609,15 @@ typedef struct Serenity_AxisState_t
 	Serenity_InputState positive_state;
 } Serenity_AxisState;
 
-typedef struct Serenity_FrameResponse_t
+typedef struct Serenity_PointerTargetFallbackResponse_t
 {
 	Serenity_PointerState pointer;
-
-	Serenity_ButtonState activate;
-	Serenity_ButtonState cancel;
-
-	Serenity_AxisState navigation_x;
-	Serenity_AxisState navigation_y;
-} Serenity_FrameResponse;
-
-typedef struct Serenity_PointerFallbackResponse_t
-{
-	Serenity_PointerState pointer;
-} Serenity_PointerFallbackResponse;
+} Serenity_PointerTargetFallbackResponse;
 
 typedef struct Serenity_PointerTargetDesc_t
 {
 	Serenity_PointerTargetId id;
-	Serenity_FocusTargetId focus_target_id;
+	Serenity_FocusNodeId focus_node_id;
 	Serenity_AnchoredRect anchored_rect;
 } Serenity_PointerTargetDesc;
 
@@ -626,27 +630,28 @@ typedef struct Serenity_PointerTargetResponse_t
 	Serenity_Rect local_rect;
 } Serenity_PointerTargetResponse;
 
-typedef struct Serenity_FocusTargetDesc_t
+typedef struct Serenity_FocusNodeDesc_t
 {
-	Serenity_FocusTargetId id;
+	Serenity_FocusNodeId id;
 
 	Serenity_FocusCaptureFlags capture;
 	Serenity_FocusCaptureFlags activate_capture;
-} Serenity_FocusTargetDesc;
+} Serenity_FocusNodeDesc;
 
 typedef struct Serenity_FocusLinkDesc_t
 {
-	Serenity_FocusTargetId source_id;
-	Serenity_FocusTargetId destination_id;
-	Serenity_FocusNavigationDirection direction;
+	Serenity_FocusNodeId source_node_id;
+	Serenity_FocusNodeId destination_node_id;
+	Serenity_FocusAction action;
 } Serenity_FocusLinkDesc;
 
 typedef struct Serenity_FocusSequenceDesc_t
 {
+	Serenity_FocusSequenceFlow flow;
 	uint32_t loop;
 } Serenity_FocusSequenceDesc;
 
-typedef struct Serenity_FocusTargetResponse_t
+typedef struct Serenity_FocusNodeResponse_t
 {
 	uint32_t focused;
 
@@ -655,7 +660,7 @@ typedef struct Serenity_FocusTargetResponse_t
 
 	Serenity_AxisState navigation_x;
 	Serenity_AxisState navigation_y;
-} Serenity_FocusTargetResponse;
+} Serenity_FocusNodeResponse;
 
 // Function pointers
 typedef Serenity_Result (*PFN_serenityGetFontMetrics)(void *user_data, Serenity_FontId font, Serenity_FontMetrics *metrics);
@@ -705,7 +710,7 @@ SERENITY_APIENTRY Serenity_Result serenityCreateInstance(const Serenity_Instance
 SERENITY_APIENTRY Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_InstanceTable *instance_table);
 
 #if !defined(SERENITY_NO_PROTOTYPES)
-SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc, Serenity_FrameResponse *response);
+SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data);
 
 SERENITY_APIENTRY Serenity_Result serenitySetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_Vec2 root_position, uint32_t pressed);
@@ -716,7 +721,7 @@ SERENITY_APIENTRY Serenity_Result serenityAbortPointer(Serenity_Instance instanc
 SERENITY_APIENTRY Serenity_Result serenityAbortButton(Serenity_Instance instance, Serenity_ButtonId button_id);
 SERENITY_APIENTRY Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId axis_id);
 
-SERENITY_APIENTRY Serenity_Result serenityPointerFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerFallbackResponse *response);
+SERENITY_APIENTRY Serenity_Result serenityPointerTargetFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerTargetFallbackResponse *response);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
@@ -742,16 +747,14 @@ SERENITY_APIENTRY Serenity_Result serenityDecorateCustom(Serenity_Instance insta
 SERENITY_APIENTRY Serenity_Result serenityPointerTargetRectangle(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
 
-SERENITY_APIENTRY Serenity_Result serenityFocusTarget(Serenity_Instance instance, const Serenity_FocusTargetDesc *desc, Serenity_FocusTargetResponse *response);
-SERENITY_APIENTRY Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusTargetId target_id);
+SERENITY_APIENTRY Serenity_Result serenityFocusNode(Serenity_Instance instance, const Serenity_FocusNodeDesc *desc, Serenity_FocusNodeResponse *response);
+SERENITY_APIENTRY Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusNodeId node_id);
 
 SERENITY_APIENTRY Serenity_Result serenityFocusLink(Serenity_Instance instance, const Serenity_FocusLinkDesc *desc);
 
-SERENITY_APIENTRY Serenity_Result serenityBeginFocusRow(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityEndFocusRow(Serenity_Instance instance);
 
-SERENITY_APIENTRY Serenity_Result serenityBeginFocusColumn(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityEndFocusColumn(Serenity_Instance instance);
+SERENITY_APIENTRY Serenity_Result serenityBeginFocusSequence(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityEndFocusSequence(Serenity_Instance instance);
 
 SERENITY_APIENTRY Serenity_Result serenityDestroyInstance(Serenity_Instance instance);
 #endif
