@@ -613,6 +613,7 @@ typedef struct Serenity_PointerState_t
 	Serenity_PointerId id;
 	Serenity_InputState state;
 	Serenity_Vec2 root_position;
+	Serenity_PointerTargetId captured_by;
 } Serenity_PointerState;
 
 typedef struct Serenity_ButtonState_t
