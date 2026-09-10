@@ -226,17 +226,6 @@ Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId ax
 	return SERENITY_NOT_IMPLEMENTED;
 }
 
-Serenity_Result serenityPointerTargetFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerTargetFallbackResponse *response)
-{
-	SERENITY_UNUSED(z_order);
-	SERENITY_UNUSED(response);
-
-	if (instance == SERENITY_NULL_HANDLE)
-		return SERENITY_INVALID_INSTANCE;
-
-	return SERENITY_NOT_IMPLEMENTED;
-}
-
 Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc)
 {
 	SERENITY_UNUSED(desc);

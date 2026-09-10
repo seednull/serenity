@@ -220,6 +220,26 @@ typedef enum Serenity_FocusSequenceFlow_t
 	SERENITY_FOCUS_SEQUENCE_FLOW_ENUM_FORCE32 = 0x7FFFFFFF,
 } Serenity_FocusSequenceFlow;
 
+typedef enum Serenity_PointerTargetFallback_t
+{
+	SERENITY_POINTER_TARGET_FALLBACK_NONE = 0,
+	SERENITY_POINTER_TARGET_FALLBACK_PASSTHROUGH,
+	SERENITY_POINTER_TARGET_FALLBACK_MODAL,
+
+	SERENITY_POINTER_TARGET_FALLBACK_ENUM_MAX,
+	SERENITY_POINTER_TARGET_FALLBACK_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_PointerTargetFallback;
+
+typedef enum Serenity_PointerTargetMatch_t
+{
+	SERENITY_POINTER_TARGET_MATCH_NONE = 0,
+	SERENITY_POINTER_TARGET_MATCH_HIT,
+	SERENITY_POINTER_TARGET_MATCH_FALLBACK,
+
+	SERENITY_POINTER_TARGET_MATCH_ENUM_MAX,
+	SERENITY_POINTER_TARGET_MATCH_ENUM_FORCE32 = 0x7FFFFFFF,
+} Serenity_PointerTargetMatch;
+
 // Structs
 typedef struct Serenity_Vec2_t
 {
@@ -609,21 +629,17 @@ typedef struct Serenity_AxisState_t
 	Serenity_InputState positive_state;
 } Serenity_AxisState;
 
-typedef struct Serenity_PointerTargetFallbackResponse_t
-{
-	Serenity_PointerState pointer;
-} Serenity_PointerTargetFallbackResponse;
-
 typedef struct Serenity_PointerTargetDesc_t
 {
 	Serenity_PointerTargetId id;
 	Serenity_FocusNodeId focus_node_id;
 	Serenity_AnchoredRect anchored_rect;
+	Serenity_PointerTargetFallback fallback;
 } Serenity_PointerTargetDesc;
 
 typedef struct Serenity_PointerTargetResponse_t
 {
-	uint32_t hovered;
+	Serenity_PointerTargetMatch match;
 	Serenity_PointerState pointer;
 
 	Serenity_Vec2 local_pointer;
@@ -720,8 +736,6 @@ SERENITY_APIENTRY Serenity_Result serenitySetAxisState(Serenity_Instance instanc
 SERENITY_APIENTRY Serenity_Result serenityAbortPointer(Serenity_Instance instance, Serenity_PointerId pointer_id);
 SERENITY_APIENTRY Serenity_Result serenityAbortButton(Serenity_Instance instance, Serenity_ButtonId button_id);
 SERENITY_APIENTRY Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId axis_id);
-
-SERENITY_APIENTRY Serenity_Result serenityPointerTargetFallback(Serenity_Instance instance, int32_t z_order, Serenity_PointerTargetFallbackResponse *response);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
