@@ -727,9 +727,6 @@ SERENITY_APIENTRY Serenity_Result serenityCreateInstance(const Serenity_Instance
 SERENITY_APIENTRY Serenity_Result serenityGetInstanceTable(Serenity_Instance instance, Serenity_InstanceTable *instance_table);
 
 #if !defined(SERENITY_NO_PROTOTYPES)
-SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data);
-
 SERENITY_APIENTRY Serenity_Result serenitySetPointerState(Serenity_Instance instance, Serenity_PointerId id, Serenity_Vec2 root_position, uint32_t pressed);
 SERENITY_APIENTRY Serenity_Result serenitySetButtonState(Serenity_Instance instance, Serenity_ButtonId id, uint32_t pressed);
 SERENITY_APIENTRY Serenity_Result serenitySetAxisState(Serenity_Instance instance, Serenity_AxisId id, float value);
@@ -737,6 +734,9 @@ SERENITY_APIENTRY Serenity_Result serenitySetAxisState(Serenity_Instance instanc
 SERENITY_APIENTRY Serenity_Result serenityAbortPointer(Serenity_Instance instance, Serenity_PointerId pointer_id);
 SERENITY_APIENTRY Serenity_Result serenityAbortButton(Serenity_Instance instance, Serenity_ButtonId button_id);
 SERENITY_APIENTRY Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId axis_id);
+
+SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc);
+SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
@@ -762,11 +762,10 @@ SERENITY_APIENTRY Serenity_Result serenityDecorateCustom(Serenity_Instance insta
 SERENITY_APIENTRY Serenity_Result serenityPointerTargetRectangle(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
 
-SERENITY_APIENTRY Serenity_Result serenityFocusNode(Serenity_Instance instance, const Serenity_FocusNodeDesc *desc, Serenity_FocusNodeResponse *response);
 SERENITY_APIENTRY Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusNodeId node_id);
 
+SERENITY_APIENTRY Serenity_Result serenityFocusNode(Serenity_Instance instance, const Serenity_FocusNodeDesc *desc, Serenity_FocusNodeResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityFocusLink(Serenity_Instance instance, const Serenity_FocusLinkDesc *desc);
-
 
 SERENITY_APIENTRY Serenity_Result serenityBeginFocusSequence(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndFocusSequence(Serenity_Instance instance);
