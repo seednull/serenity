@@ -35,6 +35,10 @@
 	#define SERENITY_ID_NONE 0
 #endif
 
+#if !defined(SERENITY_ID_GUARD)
+	#define SERENITY_ID_GUARD 0x7F000000
+#endif
+
 #define SERENITY_DEFINE_HANDLE(TYPE) typedef uint64_t TYPE
 #define SERENITY_DEFINE_ID(TYPE) typedef uint32_t TYPE
 

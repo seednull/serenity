@@ -144,9 +144,16 @@ static SERENITY_INLINE uint32_t murmur3Hash(uint32_t seed, const void *data, uin
 	return hash;
 }
 
+static SERENITY_INLINE uint32_t serenityGuardId(uint32_t hash)
+{
+	assert(SERENITY_ID_GUARD != SERENITY_ID_NONE);
+	return (hash != SERENITY_ID_NONE) ? hash : SERENITY_ID_GUARD;
+}
+
 uint32_t serenityHashId(uint32_t seed, const void *data, uint32_t size)
 {
-	return murmur3Hash(seed, data, size);
+	uint32_t hash = murmur3Hash(seed, data, size);
+	return serenityGuardId(hash);
 }
 
 uint32_t serenityCombineId(uint32_t parent, uint32_t key)
@@ -157,7 +164,8 @@ uint32_t serenityCombineId(uint32_t parent, uint32_t key)
 	bytes[2] = (uint8_t)(key >> 16);
 	bytes[3] = (uint8_t)(key >> 24);
 
-	return murmur3Hash(parent, bytes, 4);
+	uint32_t hash = murmur3Hash(parent, bytes, 4);
+	return serenityGuardId(hash);
 }
 
 uint64_t serenityGetRequiredMemory(const Serenity_CapacityDesc *capacity)
