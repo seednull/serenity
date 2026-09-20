@@ -91,23 +91,73 @@ Serenity_AnchoredRect serenityAnchoredFill(float inset)
 	return result;
 }
 
+static SERENITY_INLINE uint32_t murmur3Scramble(uint32_t value)
+{
+	value *= 0xcc9e2d51;
+	value = (value << 15) | (value >> 17);
+	value *= 0x1b873593;
+
+	return value;
+}
+
+static SERENITY_INLINE uint32_t murmur3Hash(uint32_t seed, const void *data, uint32_t size)
+{
+	assert(size == 0 || data);
+
+	uint32_t hash = seed;
+	uint32_t temp;
+
+	const uint8_t *key = (const uint8_t *)data;
+
+	for (uint32_t i = size / 4; i > 0; i--)
+	{
+		temp = ((uint32_t)key[3] << 24)
+			 | ((uint32_t)key[2] << 16)
+			 | ((uint32_t)key[1] << 8)
+			 | ((uint32_t)key[0]);
+
+		key += sizeof(uint32_t);
+
+		hash ^= murmur3Scramble(temp);
+		hash = (hash << 13) | (hash >> 19);
+		hash = hash * 5 + 0xe6546b64;
+	}
+
+	if (size % 4 != 0)
+	{
+		temp = 0;
+		for (uint32_t i = size % 4; i > 0; i--)
+		{
+			temp = (temp << 8) | key[i - 1];
+		}
+
+		hash ^= murmur3Scramble(temp);
+	}
+
+	hash ^= size;
+	hash ^= hash >> 16;
+	hash *= 0x85ebca6b;
+	hash ^= hash >> 13;
+	hash *= 0xc2b2ae35;
+	hash ^= hash >> 16;
+
+	return hash;
+}
+
 uint32_t serenityHashId(uint32_t seed, const void *data, uint32_t size)
 {
-	SERENITY_UNUSED(seed);
-	SERENITY_UNUSED(data);
-	SERENITY_UNUSED(size);
-
-	// TODO: implement this
-	return SERENITY_ID_NONE;
+	return murmur3Hash(seed, data, size);
 }
 
 uint32_t serenityCombineId(uint32_t parent, uint32_t key)
 {
-	SERENITY_UNUSED(parent);
-	SERENITY_UNUSED(key);
+	uint8_t bytes[4];
+	bytes[0] = (uint8_t)(key >> 0);
+	bytes[1] = (uint8_t)(key >> 8);
+	bytes[2] = (uint8_t)(key >> 16);
+	bytes[3] = (uint8_t)(key >> 24);
 
-	// TODO: implement this
-	return SERENITY_ID_NONE;
+	return murmur3Hash(parent, bytes, 4);
 }
 
 uint64_t serenityGetRequiredMemory(const Serenity_CapacityDesc *capacity)
