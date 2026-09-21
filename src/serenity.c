@@ -522,7 +522,7 @@ Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const S
 	assert(ptr->vtbl);
 	assert(ptr->vtbl->pointerTargetEllipse);
 
-	return ptr->vtbl->pointerTargetEllipse(instance);
+	return ptr->vtbl->pointerTargetEllipse(instance, desc, response);
 }
 
 Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusNodeId id)
