@@ -684,12 +684,94 @@ typedef Serenity_Result (*PFN_serenityGetFontMetrics)(void *user_data, Serenity_
 typedef Serenity_Result (*PFN_serenityShapeText)(void *user_data, Serenity_TextSpan text, Serenity_FontId font, uint32_t max_glyphs, Serenity_ShapedGlyph *glyphs, uint32_t *glyphs_count);
 typedef Serenity_Result (*PFN_serenityBreakText)(void *user_data, Serenity_TextSpan text, uint32_t max_breaks, Serenity_TextBreak *breaks, uint32_t *breaks_count);
 
-// TODO: add function pointers once API surface is finished
+typedef Serenity_Result (*PFN_serenitySetPointerState)(Serenity_Instance instance, Serenity_PointerId id, Serenity_Vec2 root_position, uint32_t pressed);
+typedef Serenity_Result (*PFN_serenitySetButtonState)(Serenity_Instance instance, Serenity_ButtonId id, uint32_t pressed);
+typedef Serenity_Result (*PFN_serenitySetAxisState)(Serenity_Instance instance, Serenity_AxisId id, float value);
+
+typedef Serenity_Result (*PFN_serenityAbortPointer)(Serenity_Instance instance, Serenity_PointerId id);
+typedef Serenity_Result (*PFN_serenityAbortButton)(Serenity_Instance instance, Serenity_ButtonId id);
+typedef Serenity_Result (*PFN_serenityAbortAxis)(Serenity_Instance instance, Serenity_AxisId id);
+
+typedef Serenity_Result (*PFN_serenityBeginFrame)(Serenity_Instance instance, const Serenity_FrameDesc *desc);
+typedef Serenity_Result (*PFN_serenityEndFrame)(Serenity_Instance instance, Serenity_RenderData *data);
+
+typedef Serenity_Result (*PFN_serenityBeginRootContainer)(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc);
+typedef Serenity_Result (*PFN_serenityBeginContainer)(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
+typedef Serenity_Result (*PFN_serenityText)(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_TextDesc *text_desc);
+typedef Serenity_Result (*PFN_serenityEndContainer)(Serenity_Instance instance);
+
+typedef Serenity_Result (*PFN_serenityBeginLayoutRootContainer)(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc);
+typedef Serenity_Result (*PFN_serenityBeginLayoutScrollContainer)(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, Serenity_Vec2 offset, Serenity_ScrollResponse *response);
+typedef Serenity_Result (*PFN_serenityBeginLayoutContainer)(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc);
+typedef Serenity_Result (*PFN_serenityLayoutText)(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_TextDesc *text_desc);
+typedef Serenity_Result (*PFN_serenityEndLayoutContainer)(Serenity_Instance instance);
+
+typedef Serenity_Result (*PFN_serenityBeginMaskRectangle)(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc);
+typedef Serenity_Result (*PFN_serenityBeginMaskImage)(Serenity_Instance instance, const Serenity_MaskImageDesc *desc);
+typedef Serenity_Result (*PFN_serenityBeginMaskText)(Serenity_Instance instance, const Serenity_MaskTextDesc *desc);
+typedef Serenity_Result (*PFN_serenityBeginMaskCustom)(Serenity_Instance instance, const Serenity_MaskCustomDesc *desc);
+typedef Serenity_Result (*PFN_serenityEndMask)(Serenity_Instance instance);
+
+typedef Serenity_Result (*PFN_serenityDecorateRectangle)(Serenity_Instance instance, const Serenity_DecorationRectangleDesc *desc);
+typedef Serenity_Result (*PFN_serenityDecorateImage)(Serenity_Instance instance, const Serenity_DecorationImageDesc *desc);
+typedef Serenity_Result (*PFN_serenityDecorateCustom)(Serenity_Instance instance, const Serenity_DecorationCustomDesc *desc);
+
+typedef Serenity_Result (*PFN_serenityPointerTargetRectangle)(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
+typedef Serenity_Result (*PFN_serenityPointerTargetEllipse)(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
+
+typedef Serenity_Result (*PFN_serenitySetFocus)(Serenity_Instance instance, Serenity_FocusNodeId id);
+
+typedef Serenity_Result (*PFN_serenityFocusNode)(Serenity_Instance instance, const Serenity_FocusNodeDesc *desc, Serenity_FocusNodeResponse *response);
+typedef Serenity_Result (*PFN_serenityFocusLink)(Serenity_Instance instance, const Serenity_FocusLinkDesc *desc);
+
+typedef Serenity_Result (*PFN_serenityBeginFocusSequence)(Serenity_Instance instance, const Serenity_FocusSequenceDesc *desc);
+typedef Serenity_Result (*PFN_serenityEndFocusSequence)(Serenity_Instance instance);
+
 typedef Serenity_Result (*PFN_serenityDestroyInstance)(Serenity_Instance instance);
 
 typedef struct Serenity_InstanceTable_t
 {
-	// TODO: add function pointers once API surface is finished
+	PFN_serenitySetPointerState setPointerState;
+	PFN_serenitySetButtonState setButtonState;
+	PFN_serenitySetAxisState setAxisState;
+
+	PFN_serenityAbortPointer abortPointer;
+	PFN_serenityAbortButton abortButton;
+	PFN_serenityAbortAxis abortAxis;
+
+	PFN_serenityBeginFrame beginFrame;
+	PFN_serenityEndFrame endFrame;
+
+	PFN_serenityBeginRootContainer beginRootContainer;
+	PFN_serenityBeginContainer beginContainer;
+	PFN_serenityText text;
+	PFN_serenityEndContainer endContainer;
+
+	PFN_serenityBeginLayoutRootContainer beginLayoutRootContainer;
+	PFN_serenityBeginLayoutScrollContainer beginLayoutScrollContainer;
+	PFN_serenityBeginLayoutContainer beginLayoutContainer;
+	PFN_serenityLayoutText layoutText;
+	PFN_serenityEndLayoutContainer endLayoutContainer;
+
+	PFN_serenityBeginMaskRectangle beginMaskRectangle;
+	PFN_serenityBeginMaskImage beginMaskImage;
+	PFN_serenityBeginMaskText beginMaskText;
+	PFN_serenityBeginMaskCustom beginMaskCustom;
+	PFN_serenityEndMask endMask;
+
+	PFN_serenityDecorateRectangle decorateRectangle;
+	PFN_serenityDecorateImage decorateImage;
+	PFN_serenityDecorateCustom decorateCustom;
+
+	PFN_serenityPointerTargetRectangle pointerTargetRectangle;
+	PFN_serenityPointerTargetEllipse pointerTargetEllipse;
+
+	PFN_serenitySetFocus setFocus;
+	PFN_serenityFocusNode focusNode;
+	PFN_serenityFocusLink focusLink;
+
+	PFN_serenityBeginFocusSequence beginFocusSequence;
+	PFN_serenityEndFocusSequence endFocusSequence;
 
 	PFN_serenityDestroyInstance destroyInstance;
 } Serenity_InstanceTable;
@@ -731,22 +813,22 @@ SERENITY_APIENTRY Serenity_Result serenitySetPointerState(Serenity_Instance inst
 SERENITY_APIENTRY Serenity_Result serenitySetButtonState(Serenity_Instance instance, Serenity_ButtonId id, uint32_t pressed);
 SERENITY_APIENTRY Serenity_Result serenitySetAxisState(Serenity_Instance instance, Serenity_AxisId id, float value);
 
-SERENITY_APIENTRY Serenity_Result serenityAbortPointer(Serenity_Instance instance, Serenity_PointerId pointer_id);
-SERENITY_APIENTRY Serenity_Result serenityAbortButton(Serenity_Instance instance, Serenity_ButtonId button_id);
-SERENITY_APIENTRY Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId axis_id);
+SERENITY_APIENTRY Serenity_Result serenityAbortPointer(Serenity_Instance instance, Serenity_PointerId id);
+SERENITY_APIENTRY Serenity_Result serenityAbortButton(Serenity_Instance instance, Serenity_ButtonId id);
+SERENITY_APIENTRY Serenity_Result serenityAbortAxis(Serenity_Instance instance, Serenity_AxisId id);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginFrame(Serenity_Instance instance, const Serenity_FrameDesc *desc);
 SERENITY_APIENTRY Serenity_Result serenityEndFrame(Serenity_Instance instance, Serenity_RenderData *data);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginRootContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_RootDesc *root_desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginContainer(Serenity_Instance instance, const Serenity_ContainerDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityText(Serenity_Instance instance, const Serenity_ContainerDesc *container_desc, const Serenity_TextDesc *text_desc);
+SERENITY_APIENTRY Serenity_Result serenityText(Serenity_Instance instance, const Serenity_ContainerDesc *desc, const Serenity_TextDesc *text_desc);
 SERENITY_APIENTRY Serenity_Result serenityEndContainer(Serenity_Instance instance);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginLayoutRootContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_RootDesc *root_desc);
 SERENITY_APIENTRY Serenity_Result serenityBeginLayoutScrollContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, Serenity_Vec2 offset, Serenity_ScrollResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityBeginLayoutContainer(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc);
-SERENITY_APIENTRY Serenity_Result serenityLayoutText(Serenity_Instance instance, const Serenity_LayoutContainerDesc *container_desc, const Serenity_TextDesc *text_desc);
+SERENITY_APIENTRY Serenity_Result serenityLayoutText(Serenity_Instance instance, const Serenity_LayoutContainerDesc *desc, const Serenity_TextDesc *text_desc);
 SERENITY_APIENTRY Serenity_Result serenityEndLayoutContainer(Serenity_Instance instance);
 
 SERENITY_APIENTRY Serenity_Result serenityBeginMaskRectangle(Serenity_Instance instance, const Serenity_MaskRectangleDesc *desc);
@@ -762,7 +844,7 @@ SERENITY_APIENTRY Serenity_Result serenityDecorateCustom(Serenity_Instance insta
 SERENITY_APIENTRY Serenity_Result serenityPointerTargetRectangle(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityPointerTargetEllipse(Serenity_Instance instance, const Serenity_PointerTargetDesc *desc, Serenity_PointerTargetResponse *response);
 
-SERENITY_APIENTRY Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusNodeId node_id);
+SERENITY_APIENTRY Serenity_Result serenitySetFocus(Serenity_Instance instance, Serenity_FocusNodeId id);
 
 SERENITY_APIENTRY Serenity_Result serenityFocusNode(Serenity_Instance instance, const Serenity_FocusNodeDesc *desc, Serenity_FocusNodeResponse *response);
 SERENITY_APIENTRY Serenity_Result serenityFocusLink(Serenity_Instance instance, const Serenity_FocusLinkDesc *desc);
